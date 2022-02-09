@@ -1,0 +1,17 @@
+select * from state_climate limit 5;
+
+select state, year, tempc, avg(tempc) as running_avg_temp from state_climate;
+
+select state, year, tempc, min(tempc) as lowest_temp from state_climate;
+
+select state, year, tempc, max(tempc) as highest_temp from state_climate;
+
+select state, year, tempc, tempc - lag(tempc, 1, 0) over (partition by state order by year) as change_in_temp from state_climate order by change_in_temp desc;
+
+select rank() over (order by tempc) as 'coldest_rank', state, year, tempc from state_climate;
+
+select rank() over (partition by state order by tempc desc) as warmest_rank, state, year, tempc from state_climate;
+
+select ntile(4) over (order by tempc) as quintile, state, year, tempc from state_climate;
+
+select ntile(5) over (order by tempc) as 'quintile', state, year, tempc from state_climate;
